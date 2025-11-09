@@ -16,4 +16,32 @@ FetchContent_MakeAvailable(
     sfml
 )
 
-target_link_libraries(skia-sfml-template SFML::Graphics)
+target_link_libraries(
+    skia-sfml-template
+    PUBLIC
+    SFML::Graphics
+)
+
+target_include_directories(
+    skia-sfml-template
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/external/
+    ${CMAKE_SOURCE_DIR}/external/skia
+)
+
+target_link_libraries(
+    skia-sfml-template
+    PUBLIC
+    ${CMAKE_SOURCE_DIR}/external/skia/out/Static/libskia.a
+)
+
+if(${APPLE})
+    target_link_libraries(
+        skia-sfml-template
+        PUBLIC
+        "-framework CoreServices"
+        "-framework CoreFoundation"
+        "-framework CoreGraphics"
+        "-framework CoreText"
+    )
+endif()
