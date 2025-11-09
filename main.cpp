@@ -1,5 +1,23 @@
 #include <iostream>
 
-int main(int, char**){
-    std::cout << "Hello, from skia-sfml-template!\n";
+#include <SFML/Graphics.hpp>
+
+int main(int, char **)
+{
+    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
+    window.setFramerateLimit(60);
+
+    while (window.isOpen())
+    {
+        while (const std::optional event = window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+            {
+                window.close();
+            }
+        }
+
+        window.clear();
+        window.display();
+    }
 }
