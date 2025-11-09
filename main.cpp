@@ -19,7 +19,8 @@
 #include "include/core/SkStream.h"
 #include "include/core/SkSurface.h"
 
-void draw_line(SkCanvas* canvas) {
+void draw_line(SkCanvas *canvas)
+{
     SkPaint p;
 
     p.setColor(SK_ColorRED);
@@ -28,6 +29,13 @@ void draw_line(SkCanvas* canvas) {
     p.setStrokeWidth(10);
 
     canvas->drawLine(20, 20, 100, 100, p);
+}
+
+void draw_square(SkCanvas *canvas)
+{
+    SkPaint paint;
+    paint.setColor(SK_ColorBLUE);
+    canvas->drawRect({0, 0, 250, 250}, paint);
 }
 
 int main(int, char **)
@@ -55,10 +63,7 @@ int main(int, char **)
 
         (void)window.setActive(true);
 
-        SkPaint paint;
-        paint.setColor(SK_ColorBLUE);
-        surface->getCanvas()->drawRect({0, 0, 250, 250}, paint);
-
+        draw_square(surface->getCanvas());
         draw_line(surface->getCanvas());
 
         context->flushAndSubmit();
