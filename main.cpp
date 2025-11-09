@@ -2,10 +2,35 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "skia/include/gpu/ganesh/GrBackendSurface.h"
+#include "skia/include/gpu/ganesh/gl/GrGLDirectContext.h"
+#include "skia/include/gpu/ganesh/gl/GrGLBackendSurface.h"
+
+#include "skia/include/core/SkPaint.h"
+#include "skia/include/core/SkCanvas.h"
+#include "skia/include/core/SkColorSpace.h"
+
+#include "include/gpu/ganesh/GrDirectContext.h"
+#include "include/gpu/ganesh/gl/GrGLInterface.h"
+#include "include/gpu/ganesh/SkSurfaceGanesh.h"
+
+#include "include/core/SkData.h"
+#include "include/core/SkImage.h"
+#include "include/core/SkStream.h"
+#include "include/core/SkSurface.h"
+
 int main(int, char **)
 {
-    auto window = sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
+    auto window = sf::RenderWindow(sf::VideoMode({500, 500}), "CMake SFML Project");
     window.setFramerateLimit(60);
+
+    // Setup Skia OpenGL context
+    sk_sp<const GrGLInterface> interface = GrGLMakeNativeInterface();
+    sk_sp<GrDirectContext> context = GrDirectContexts::MakeGL(interface);
+
+    // Define the image properties and create a Skia GPU surface
+    SkImageInfo imageinfo = SkImageInfo::MakeN32Premul(500, 500);
+    sk_sp<SkSurface> surface = SkSurfaces::RenderTarget(context.get(), skgpu::Budgeted::kNo, imageinfo);
 
     while (window.isOpen())
     {
@@ -17,7 +42,17 @@ int main(int, char **)
             }
         }
 
-        window.clear();
+        // Activate SFML window context
+        (void)window.setActive(true);
+        window.clear(sf::Color::White);
+
+        // Prepare the Skia drawing context
+        context->flush();
+        // Retrieve the canvas from the Skia surface
+        SkPaint paint;
+        paint.setColor(SK_ColorBLUE);
+        surface->getCanvas()->drawRect({0, 0, 250, 250}, paint);
+
         window.display();
     }
 }
