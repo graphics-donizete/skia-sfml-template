@@ -19,6 +19,17 @@
 #include "include/core/SkStream.h"
 #include "include/core/SkSurface.h"
 
+void draw_line(SkCanvas* canvas) {
+    SkPaint p;
+
+    p.setColor(SK_ColorRED);
+    p.setAntiAlias(true);
+    p.setStyle(SkPaint::kStroke_Style);
+    p.setStrokeWidth(10);
+
+    canvas->drawLine(20, 20, 100, 100, p);
+}
+
 int main(int, char **)
 {
     auto window = sf::RenderWindow(sf::VideoMode({500, 500}), "CMake SFML Project");
@@ -47,6 +58,9 @@ int main(int, char **)
         SkPaint paint;
         paint.setColor(SK_ColorBLUE);
         surface->getCanvas()->drawRect({0, 0, 250, 250}, paint);
+
+        draw_line(surface->getCanvas());
+
         context->flushAndSubmit();
 
         window.display();
