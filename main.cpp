@@ -42,16 +42,12 @@ int main(int, char **)
             }
         }
 
-        // Activate SFML window context
         (void)window.setActive(true);
-        window.clear(sf::Color::White);
 
-        // Prepare the Skia drawing context
-        context->flush();
-        // Retrieve the canvas from the Skia surface
         SkPaint paint;
         paint.setColor(SK_ColorBLUE);
         surface->getCanvas()->drawRect({0, 0, 250, 250}, paint);
+        context->flushAndSubmit();
 
         window.display();
     }
